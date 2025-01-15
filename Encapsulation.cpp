@@ -54,7 +54,7 @@ public:
         return currentTemperature;
     }
 
-    bool isWarmEnough() const {
+    bool isTooCold() const {
         if (currentTemperature < targetTemperature)
         {
             return true;
@@ -81,7 +81,14 @@ public:
     }
 
     void borrowBook() {
-        isAvailable = false;
+        if (checkAvailability())
+        {
+            isAvailable = false;
+            std::cout << "Book borrowed successfully." << std::endl;
+        }
+        else {
+            std::cout << "Book is not available for borrowing." << std::endl;
+        }
     }
 
     void returnBook() {
@@ -93,13 +100,7 @@ class Library {
 public:
     void processBookBorrowing(Book& book) {
         // Violates Tell, Don't Ask
-        if (book.checkAvailability()) {
-            book.borrowBook();
-            std::cout << "Book borrowed successfully." << std::endl;
-        }
-        else {
-            std::cout << "Book is not available for borrowing." << std::endl;
-        }
+        book.borrowBook();        
     }
 };
 
@@ -126,17 +127,29 @@ public:
     void useAmmo() {
         ammo--;
     }
+
+    bool canRespond() {
+        if (getHealth() > 0 && getAmmo() > 0) {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 };
 
 class Game {
 public:
     void enemyAttack(Player& player) {
-        if (player.getHealth() > 0 && player.getAmmo() > 0) {
+        if (player.canRespond())
+        {
             player.takeDamage(10);
             player.useAmmo();
             std::cout << "Player attacked and used ammo." << std::endl;
         }
-        else {
+        else
+        {
             std::cout << "Player can't respond to attack." << std::endl;
         }
     }
@@ -165,15 +178,15 @@ int main() {
     // Exercise 2
     //////////////////////////////////////////////////////////////////
 
-    /*Thermostat thermostat(18.5);
+    Thermostat thermostat(18.5, 20.0);
     HeatingSystem heating;
 
-    if (thermostat.getCurrentTemperature() < 20.0) {
+    if (thermostat.isTooCold()) {
         heating.turnOn();
     }
     else {
         heating.turnOff();
-    }*/
+    }
     
     //////////////////////////////////////////////////////////////////
     // Exercise 3
