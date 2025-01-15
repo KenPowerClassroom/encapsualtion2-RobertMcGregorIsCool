@@ -18,6 +18,18 @@ public:
     void withdraw(double amount) {
         balance -= amount;
     }
+
+    void withdrawAvailable(double amount) {
+        if (balance > amount)
+        {
+            withdraw(amount);
+            std::cout << "Withdrawal successful. New balance: $" << getBalance() << std::endl;
+        }
+        else
+        {
+            std::cout << "Insufficient funds for withdrawal." << std::endl;
+        }
+    }
 };
 class HeatingSystem {
 public:
@@ -33,12 +45,24 @@ public:
 class Thermostat {
 private:
     double currentTemperature;
+    double targetTemperature;
 
 public:
-    Thermostat(double temperature) : currentTemperature(temperature) {}
+    Thermostat(double temperature, double target) : currentTemperature(temperature), targetTemperature(target) {}
 
     double getCurrentTemperature() const {
         return currentTemperature;
+    }
+
+    bool isWarmEnough() const {
+        if (currentTemperature < targetTemperature)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 };
 #include <iostream>
@@ -127,18 +151,21 @@ int main() {
     BankAccount account(1000.0);
 
     // Violation of Tell, Don't Ask
-    if (account.getBalance() > 500) {
+    /*if (account.getBalance() > 500) {
         account.withdraw(500);
         std::cout << "Withdrawal successful. New balance: $" << account.getBalance() << std::endl;
     }
     else {
         std::cout << "Insufficient funds for withdrawal." << std::endl;
-    }
+    }*/
+
+    account.withdrawAvailable(500);
+
     //////////////////////////////////////////////////////////////////
     // Exercise 2
     //////////////////////////////////////////////////////////////////
 
-    Thermostat thermostat(18.5);
+    /*Thermostat thermostat(18.5);
     HeatingSystem heating;
 
     if (thermostat.getCurrentTemperature() < 20.0) {
@@ -146,7 +173,7 @@ int main() {
     }
     else {
         heating.turnOff();
-    }
+    }*/
     
     //////////////////////////////////////////////////////////////////
     // Exercise 3
